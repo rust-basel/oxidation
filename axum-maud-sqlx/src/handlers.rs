@@ -4,7 +4,7 @@ use axum::{
     http::{StatusCode, Uri},
     response::IntoResponse,
 };
-use tracing_log::log::{info, warn};
+use tracing_log::log::{error, info, warn};
 
 use crate::{
     model::{Job, JobId, Limit},
@@ -29,7 +29,10 @@ pub async fn get_jobs(repo: Extension<JobRepo>, limit: Query<Limit>) -> impl Int
                 }
             }),
         ),
-        Err(err) => (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}"))),
+        Err(err) => {
+            error!("Failed to get a page of jobs: {err}\n{:?}", err.source());
+            (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}")))
+        }
     }
 }
 
@@ -52,7 +55,10 @@ pub async fn get_job(repo: Extension<JobRepo>, job_id: Path<JobId>) -> impl Into
             StatusCode::NOT_FOUND,
             Err(format!("Job with id {} not found", *job_id)),
         ),
-        Err(err) => (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}"))),
+        Err(err) => {
+            error!("Failed to get job {}. {err}\n{:?}", *job_id, err.source());
+            (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}")))
+        }
     }
 }
 
@@ -65,9 +71,12 @@ pub async fn create_job(repo: Extension<JobRepo>, uri: Json<String>) -> impl Int
     };
 
     match repo.create(&uri).await {
-        Ok(_) => (StatusCode::OK, Ok("Ok")),
+        Ok(resp) => (StatusCode::OK, Ok(Json(resp))),
         Err(err) => {
-            warn!("Failed to create job from request: {err}");
+            error!(
+                "Failed to create job from request: {err}\n{:?}",
+                err.source()
+            );
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Err("Failed to create a job".to_string()),
@@ -85,7 +94,10 @@ pub async fn delete_job(repo: Extension<JobRepo>, job_id: Path<JobId>) -> impl I
             Err(format!("Tried to update non existant job {job_id}")),
         ),
         Err(err) => {
-            warn!("Failed to create job from request: {err}");
+            warn!(
+                "Failed to create job from request: {err}\n{:?}",
+                err.source()
+            );
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Err(format!("Failed to update job with id {}", job_id)),
@@ -114,7 +126,10 @@ pub async fn update_job(
             Err(format!("Tried to update non existant job {job_id}")),
         ),
         Err(err) => {
-            warn!("Failed to create job from request: {err}");
+            error!(
+                "Failed to create job from request: {err}\n{:?}",
+                err.source()
+            );
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Err(format!("Failed to update job with id {}", job_id)),

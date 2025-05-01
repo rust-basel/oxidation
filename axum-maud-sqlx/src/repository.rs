@@ -49,6 +49,7 @@ impl JobRepo {
             r#"
                 INSERT INTO 
                     job (uri) VALUES (?1)
+                ON CONFLICT (uri) DO UPDATE SET uri = (?1)
                 RETURNING id as "id: JobId", uri as "uri: JobUri";
             "#,
             uri_str
@@ -109,6 +110,7 @@ impl JobRepo {
         )
         .fetch_optional(&self.pool)
         .await
+        // todo: Unique constraint violation handling, should bubble up to bad request
         .context(format!("Failed to execute query for job with id {id}"))
     }
 

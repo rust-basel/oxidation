@@ -1,9 +1,9 @@
 use std::fmt::Display;
 
 use axum::http::Uri;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(sqlx::Type, Clone, Copy, Debug, PartialEq, Eq, Deserialize)]
+#[derive(sqlx::Type, Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[sqlx(transparent)]
 #[serde(transparent)]
 pub struct JobId(i64);
@@ -14,7 +14,7 @@ impl Display for JobId {
     }
 }
 
-#[derive(sqlx::Type, Clone, Debug, PartialEq, Eq, Deserialize)]
+#[derive(sqlx::Type, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[sqlx(transparent)]
 #[serde(transparent)]
 pub struct JobUri(String);
@@ -48,7 +48,7 @@ impl From<Uri> for JobUri {
     }
 }
 
-#[derive(sqlx::Decode, Clone, Debug, PartialEq, Eq, Deserialize)]
+#[derive(sqlx::Decode, Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct Job {
     pub id: JobId,
     pub uri: JobUri,
