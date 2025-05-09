@@ -4,4 +4,4 @@ services:
     ports:
       - "8000:8000"
     environment:
-      ROCKET_address: 0.0.0.0
+      OXIDATION_ADDRESS: 0.0.0.0

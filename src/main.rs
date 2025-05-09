@@ -1,19 +1,20 @@
-use rocket::http::Status;
+use std::env;
 
-#[macro_use]
-extern crate rocket;
+use axum::{Router, routing::get};
+use log::info;
 
-#[get("/healthz")]
-fn healthz() -> Status {
-    Status::Ok
-}
+#[tokio::main]
+async fn main() {
+    env_logger::init();
 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
-    let _rocket = rocket::build()
-        .mount("/", routes![healthz])
-        .launch()
-        .await?;
+    let address = env::var("OXIDATION_ADDRESS").unwrap_or("0.0.0.0".to_string());
+    let port = env::var("OXIDATION_PORT").unwrap_or("8000".to_string());
 
-    Ok(())
+    let host = format!("{}:{}", address, port);
+    //
+    let app = Router::new().route("/healthz", get(|| async { "" }));
+
+    let listener = tokio::net::TcpListener::bind(&host).await.unwrap();
+    info!(target: "server", "started {host}");
+    axum::serve(listener, app).await.unwrap();
 }

@@ -6,4 +6,7 @@ authors = ["rust Basel", "all its members"]
 
 
 [dependencies]
-rocket = "0.5.1"
+axum = "0.8.4"
+env_logger = "0.11.8"
+log = "0.4.27"
+tokio = { version = "1.45.0", features = ["macros", "rt-multi-thread"] }
