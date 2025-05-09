@@ -19,11 +19,12 @@ test:
     
 # Run the static code analysis
 lint:
-    cargo fmt --all -- --check
-    cargo clippy
+    cargo fmt --all --check
+    cargo clippy -- -Dwarnings
 
 fmt:
     cargo fmt
+    cargo fix --allow-dirty
     
     
 hurl_opts := "--variables-file api_tests/hurl_env --test --jobs 1"   
