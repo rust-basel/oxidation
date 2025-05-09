@@ -1,5 +1,5 @@
 
-build version:
+build version="latest":
     docker build -t {{image_name}}:{{version}} .
 
 push:
@@ -11,3 +11,7 @@ _d_push version:
 
 get_version:
     cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version'
+
+up *args: build
+    docker compose down
+    docker compose up {{ args }}  

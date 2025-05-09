@@ -1,0 +1,7 @@
+services:
+  oxidation:
+    image: ghcr.io/rust-basel/oxidation
+    ports:
+      - "8000:8000"
+    environment:
+      ROCKET_address: 0.0.0.0
