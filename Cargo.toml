@@ -4,5 +4,6 @@ version = "0.1.0"
 edition = "2024"
 authors = ["rust Basel", "all its members"]
 
+
 [dependencies]
 rocket = "0.5.1"

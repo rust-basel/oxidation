@@ -1,4 +1,6 @@
+import 'docker.just'
 
+image_name := "ghcr.io/rust-basel/oxidation"
 
 run *args:
     cargo run {{args}}
