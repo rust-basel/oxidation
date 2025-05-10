@@ -8,7 +8,10 @@ mod jobs;
 mod ox_env;
 
 fn app() -> Router {
-    Router::new().merge(health::router())
+    Router::new()
+        .merge(health::router())
+        .merge(jobs::router())
+        .merge(assets::router())
 }
 
 #[tokio::main]
