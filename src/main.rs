@@ -5,7 +5,7 @@ mod health;
 mod ox_env;
 
 fn app() -> Router {
-    Router::new().nest("/", health::router())
+    Router::new().merge(health::router())
 }
 
 #[tokio::main]

@@ -1,4 +1,4 @@
-import 'docker.just'
+import 'justfiles/docker.just'
 
 image_name := "ghcr.io/rust-basel/oxidation"
 
