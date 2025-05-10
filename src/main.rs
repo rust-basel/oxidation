@@ -1,9 +1,11 @@
 use axum::Router;
 use log::info;
 
+mod assets;
 mod health;
-mod ox_env;
 mod http_types;
+mod jobs;
+mod ox_env;
 
 fn app() -> Router {
     Router::new().merge(health::router())

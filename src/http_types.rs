@@ -1,10 +1,11 @@
-use axum::{http::{header, HeaderValue}, response::IntoResponse, response::Response};
-
-
+use axum::{
+    http::{HeaderValue, header},
+    response::IntoResponse,
+    response::Response,
+};
 
 #[allow(unused)]
 pub type OxHtml = axum::response::Html<String>;
-
 
 /// An CSS response.
 ///
