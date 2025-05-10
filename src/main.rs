@@ -3,6 +3,7 @@ use log::info;
 
 mod health;
 mod ox_env;
+mod http_types;
 
 fn app() -> Router {
     Router::new().merge(health::router())
