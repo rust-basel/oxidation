@@ -7,7 +7,7 @@ pub use root::router;
 pub fn ui() -> Markup {
     html! {
     (maud::DOCTYPE)
-    html data-theme="retro" {
+    html data-theme="rust-ember" {
         head {
             script src="/_assets/tw.js" {}
             link href="/_assets/daisy.css" rel="stylesheet" type="text/css";
@@ -15,7 +15,7 @@ pub fn ui() -> Markup {
             meta charset="UTF-8";
             meta name="viewport" content="width=device-width, initial-scale=1.0";
             title {
-                "Rust Jobs Board"
+                "Oxidation Jobs"
             }
 
 

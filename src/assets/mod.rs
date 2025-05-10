@@ -2,6 +2,7 @@ use axum::{Router, extract::Path, response::IntoResponse, routing::get};
 
 use crate::http_types::{ox_css, ox_js};
 
+pub mod basel;
 pub mod daisy;
 pub mod tailwind;
 pub mod themes;
@@ -20,7 +21,7 @@ async fn assets(Path(file): Path<String>) -> impl IntoResponse {
     let content = match file.as_str() {
         "daisy.css" => daisy::CSS,
         "tw.js" => tailwind::JS,
-        "themes.css" => themes::CSS,
+        "themes.css" => basel::CSS,
         _ => "",
     };
 
