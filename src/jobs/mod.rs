@@ -1,5 +1,6 @@
 use maud::{Markup, html};
 
+mod filter;
 mod root;
 
 pub use root::router;
@@ -15,30 +16,43 @@ pub fn ui() -> Markup {
             meta charset="UTF-8";
             meta name="viewport" content="width=device-width, initial-scale=1.0";
             title {
-                "Oxidation Jobs"
+                "Oxidation"
             }
 
 
         }
         body {
             header class="mb-8 text-center" {
-                h1 class="text-4xl font-bold text-primary mb-2" {
-                    "Rust Job Postings"
+                h1 class="text-xl text-base mb-2" {
+                    "Oxidation"
                 }
                 p class="text-sm text-neutral-content" {
                     "Hand-picked opportunities for Rustaceans \u{1f980}"
                 }
             }
-            main class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" {
+            main {
+
+
+                div ."mx-3 mb-5" {
+                    (filter::render(
+                        vec![filter::single("Full Rust"), filter::single("Some Rust")]
+                    ))
+                    (filter::render(
+                        vec![ filter::single_color("On-Site", "bg-primary")]
+                    ))
+                }
+
+                div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-3" {
 
                (job_card("Krypto Eng.", "Write the new app layers", vec![html!{
                    div class="badge badge-accent" {
                        "On-site"
                    }
-               }], "This job is great because lorem ipsum", html!{ button class="btn btn-primary btn-sm" {
+               }], "This job is great because lorem ipsum", html!{
+                   button class="btn btn-secondary btn-sm bg-base" {
                    "Apply"
                }}))
-
+            }
             }
         }
     }
@@ -56,9 +70,9 @@ fn job_card(
     let subtitle = subtitle.into();
     let description = description.into();
     html! {
-        div class="card bg-base-100 shadow-md border border-neutral" {
+        div class="card bg-base-100 shadow-md border border-base-300" {
             div class="card-body" {
-                h2 class="card-title text-primary" {
+                h2 class="card-title text-base" {
                     (title)
                 }
                 p class="text-sm text-neutral-content" {

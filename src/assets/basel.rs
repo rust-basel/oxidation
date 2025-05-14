@@ -1,39 +1,29 @@
 pub const CSS: &str = r###":root:has(input.theme-controller[value=rust-ember]:checked),
 [data-theme="rust-ember"] {
-  color-scheme: dark;
-
-  --color-base-100: oklch(22% 0.02 30); /* dark charcoal background */
-  --color-base-200: oklch(28% 0.025 35);
-  --color-base-300: oklch(35% 0.03 40);
-  --color-base-content: oklch(88% 0.03 20); /* light text on dark */
-
-  --color-primary: oklch(70% 0.22 35); /* warm glowing orange */
-  --color-primary-content: oklch(15% 0.02 25); /* dark on orange */
-
-  --color-secondary: oklch(72% 0.25 10); /* deep hot pink */
-  --color-secondary-content: oklch(15% 0.02 25); /* dark on pink */
-
-  --color-accent: oklch(68% 0.18 50); /* coral/pink-orange blend */
-  --color-accent-content: oklch(15% 0.02 25);
-
-  --color-neutral: oklch(28% 0.01 40); /* slightly blue-ish dark gray */
-  --color-neutral-content: oklch(85% 0.02 25);
-
-  --color-info: oklch(65% 0.12 280); /* violet-ish info pop */
-  --color-info-content: oklch(15% 0.02 25);
-
-  --color-success: oklch(65% 0.15 150); /* soft green */
-  --color-success-content: oklch(15% 0.02 25);
-
-  --color-warning: oklch(72% 0.24 70); /* warm yellow-orange */
-  --color-warning-content: oklch(15% 0.02 25);
-
-  --color-error: oklch(70% 0.25 25); /* warm red-orange */
-  --color-error-content: oklch(15% 0.02 25);
-
-  --radius-selector: 0.25rem;
+color-scheme: "dark";
+  --color-base-100: oklch(0% 0 0);
+  --color-base-200: oklch(0% 0 0);
+  --color-base-300: oklch(29% 0.066 243.157);
+  --color-base-content: oklch(68% 0.162 75.834);
+  --color-primary: oklch(35% 0 0);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(35% 0 0);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(35% 0 0);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(35% 0 0);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(45.201% 0.313 264.052);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(51.975% 0.176 142.495);
+  --color-success-content: oklch(90.395% 0.035 142.495);
+  --color-warning: oklch(96.798% 0.211 109.769);
+  --color-warning-content: oklch(19.359% 0.042 109.769);
+  --color-error: oklch(62.795% 0.257 29.233);
+  --color-error-content: oklch(12.559% 0.051 29.233);
+  --radius-selector: 1rem;
   --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
+  --radius-box: 0.25rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
