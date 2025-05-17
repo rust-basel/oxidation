@@ -1,6 +1,7 @@
 use maud::{Markup, html};
 
 mod filter;
+mod job_card;
 mod root;
 
 pub use root::router;

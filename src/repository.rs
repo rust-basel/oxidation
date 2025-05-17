@@ -1,12 +1,12 @@
 use anyhow::Context;
 use anyhow::Result;
 use axum::http::Uri;
+use log::info;
 use serde::{Deserialize, Serialize};
 use sqlx::{
     SqlitePool,
     sqlite::{SqliteConnectOptions, SqlitePoolOptions},
 };
-use tracing_log::log::info;
 
 use crate::model::Job;
 use crate::model::Limit;
@@ -143,7 +143,7 @@ mod test {
 
     #[tokio::test]
     async fn test_conn() {
-        let url = "sqlite:data/database.db";
+        let url = "sqlite:data/dev.db";
         SqliteConnection::connect(url)
             .await
             .expect("Failed open file");
@@ -160,11 +160,6 @@ mod test {
             .create(&uri)
             .await
             .expect("failed to insert job in test");
-        let job = repo
-            .get_one(job.id)
-            .await
-            .expect("failed to execute retrieve job query")
-            .expect("didn't find the job we just inserted for test");
 
         let jobs = repo
             .get_page(Limit {

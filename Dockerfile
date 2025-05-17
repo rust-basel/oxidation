@@ -16,5 +16,7 @@ RUN cargo build --release --bin oxidation
 # You do not need the Rust toolchain to run the binary!
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
+RUN mkdir data
+RUN touch data/dev.db
 COPY --from=builder /app/target/release/oxidation /usr/local/bin
 CMD ["/usr/local/bin/oxidation"]

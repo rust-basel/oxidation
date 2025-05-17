@@ -4,4 +4,6 @@ services:
     ports:
       - "8000:8000"
     environment:
-      OXIDATION_ADDRESS: 0.0.0.0
+      OX_host: 0.0.0.0
+      OX_port: 8000
+      OX_db_path: "data/dev.db"

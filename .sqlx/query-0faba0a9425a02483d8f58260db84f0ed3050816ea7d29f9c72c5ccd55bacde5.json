@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                SELECT \n                    id as \"id: JobId\",\n                    uri as \"uri: JobUri\" \n                FROM job WHERE id = ?1;\n            ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id: JobId",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "uri: JobUri",
+        "ordinal": 1,
+        "type_info": "Null"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "0faba0a9425a02483d8f58260db84f0ed3050816ea7d29f9c72c5ccd55bacde5"
+}

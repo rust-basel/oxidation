@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                SELECT \n                    id as \"id: JobId\",\n                    uri as \"uri: JobUri\" \n                FROM job LIMIT ?1 OFFSET ?2;\n            ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id: JobId",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "uri: JobUri",
+        "ordinal": 1,
+        "type_info": "Null"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "bbc3d3e811abc6a95c304ba9821e3b0fef8ac11e1e7a780d79cc85022787f564"
+}

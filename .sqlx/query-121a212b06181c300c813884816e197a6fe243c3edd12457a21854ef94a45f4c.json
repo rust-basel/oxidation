@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                UPDATE job SET uri = ?1\n                WHERE id = ?2\n                RETURNING\n                    id as \"id: JobId\",\n                    uri as \"uri: JobUri\";\n            ",
+  "describe": {
+    "columns": [
+      {
+        "name": "id: JobId",
+        "ordinal": 0,
+        "type_info": "Integer"
+      },
+      {
+        "name": "uri: JobUri",
+        "ordinal": 1,
+        "type_info": "Null"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "121a212b06181c300c813884816e197a6fe243c3edd12457a21854ef94a45f4c"
+}

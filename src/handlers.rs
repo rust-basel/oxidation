@@ -1,66 +1,12 @@
 use axum::{
     Extension, Json,
-    extract::{Path, Query},
+    extract::Path,
     http::{StatusCode, Uri},
     response::IntoResponse,
 };
-use tracing_log::log::{error, info, warn};
+use log::{error, warn};
 
-use crate::{
-    model::{Job, JobId, Limit},
-    repository::JobRepo,
-};
-use maud::html;
-
-#[axum::debug_handler]
-pub async fn get_jobs(repo: Extension<JobRepo>, limit: Query<Limit>) -> impl IntoResponse {
-    let limit: Limit = *limit;
-    match repo.get_page(limit).await {
-        Ok(jobs) => (
-            StatusCode::OK,
-            Ok(html! {
-                p {
-                    @for job in &jobs {
-                        li {
-                            a href = (format!("/jobs/{}", job.id))  {"Job: " (job.id) " – "}
-                            a href = (job.uri) {(job.uri)}
-                        }
-                    }
-                }
-            }),
-        ),
-        Err(err) => {
-            error!("Failed to get a page of jobs: {err}\n{:?}", err.source());
-            (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}")))
-        }
-    }
-}
-
-pub async fn get_job(repo: Extension<JobRepo>, job_id: Path<JobId>) -> impl IntoResponse {
-    info!("Got job {}?", *job_id);
-    match repo.get_one(*job_id).await {
-        Ok(Some(Job { id, uri })) => (
-            StatusCode::OK,
-            Ok(html! {
-                p {
-                    a href = "/jobs" {"Back"}
-                }
-                p {
-                    "Job: " (id) " – "
-                    a href = (uri) {(uri)}
-                }
-            }),
-        ),
-        Ok(None) => (
-            StatusCode::NOT_FOUND,
-            Err(format!("Job with id {} not found", *job_id)),
-        ),
-        Err(err) => {
-            error!("Failed to get job {}. {err}\n{:?}", *job_id, err.source());
-            (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}")))
-        }
-    }
-}
+use crate::{model::JobId, repository::JobRepo};
 
 pub async fn create_job(repo: Extension<JobRepo>, uri: Json<String>) -> impl IntoResponse {
     let Ok(uri) = uri.parse::<Uri>() else {

@@ -1,4 +1,5 @@
 import 'justfiles/docker.just'
+set dotenv-load
 
 image_name := "ghcr.io/rust-basel/oxidation"
 
@@ -7,7 +8,8 @@ export RUST_LOG := "info"
 run *args:
     cargo run {{args}}
 
-
+prepare:
+    cargo sqlx prepare
 
 
 @verify: test lint build-and-run-api-test
