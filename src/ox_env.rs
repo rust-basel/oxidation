@@ -15,6 +15,7 @@ pub struct OxConfig {
     db_config: JobRepoConfig,
 }
 
+// todo extract out to own module
 pub struct OxApp {
     pub socket_addr: SocketAddr,
     pub repo: JobRepo,

@@ -17,6 +17,7 @@ pub struct JobRequest {
     description: String,
 }
 
+// todo move to jobs module
 pub async fn create_job(repo: Extension<JobRepo>, payload: Form<JobRequest>) -> impl IntoResponse {
     let Ok(uri) = payload.0.uri.parse::<Uri>() else {
         return (
