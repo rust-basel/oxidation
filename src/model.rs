@@ -59,15 +59,15 @@ pub struct Job {
 
 impl Job {
     pub fn title(&self) -> String {
-        self.title.clone().unwrap_or(String::new())
+        self.title.clone().unwrap_or_default()
     }
 
     pub fn preface(&self) -> String {
-        self.preface.clone().unwrap_or(String::new())
+        self.preface.clone().unwrap_or_default()
     }
 
     pub fn description(&self) -> String {
-        self.description.clone().unwrap_or(String::new())
+        self.description.clone().unwrap_or_default()
     }
 
     pub fn uri(&self) -> String {
