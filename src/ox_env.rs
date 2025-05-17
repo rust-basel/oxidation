@@ -61,21 +61,19 @@ impl OxApp {
             shutdown,
         } = self;
         let routes = Router::new()
+            .merge(health::router())
+            .merge(jobs::router())
+            .merge(assets::router())
             .route("/api/jobs", put(crate::handlers::create_job))
             .route("/api/jobs/{job_id}", post(crate::handlers::update_job))
             .route("/api/jobs/{job_id}", delete(crate::handlers::delete_job))
             .layer(Extension(repo));
 
-        let wiht_view = routes
-            .merge(health::router())
-            .merge(jobs::router())
-            .merge(assets::router());
-
         let listener = TcpListener::bind(socket_addr)
             .await
             .context("failed to bind socket")?;
         info!("server bound to {socket_addr}");
-        let serve = axum::serve(listener, wiht_view);
+        let serve = axum::serve(listener, routes);
         tokio::select!(
             serve = serve => match serve {
                 Ok(()) => {

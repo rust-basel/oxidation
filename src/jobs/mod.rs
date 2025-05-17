@@ -11,6 +11,7 @@ pub fn ui() -> Markup {
     (maud::DOCTYPE)
     html data-theme="rust-ember" {
         head {
+            script src="/_assets/htmx.js" {}
             script src="/_assets/tw.js" {}
             link href="/_assets/daisy.css" rel="stylesheet" type="text/css";
             link href="/_assets/themes.css" rel="stylesheet" type="text/css";
@@ -43,17 +44,23 @@ pub fn ui() -> Markup {
                     ))
                 }
 
+
                 div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mx-3" {
 
-               (job_card("Krypto Eng.", "Write the new app layers", vec![html!{
-                   div class="badge badge-accent" {
-                       "On-site"
-                   }
-               }], "This job is great because lorem ipsum", html!{
-                   button class="btn btn-secondary btn-sm bg-base" {
-                   "Apply"
-               }}))
+
+
+               div hx-get="/jobs" hx-trigger="load" {
+
+               }
             }
+            }
+
+            // example job
+            form hx-put="/api/jobs" hx-trigger="load" hx-target="null" {
+                input type="hidden" id="uri" name="uri" value="https://rust-basel.ch" {}
+                input type="hidden" id="title" name="title" value="https://rust-basel.ch" {}
+                input type="hidden" id="preface" name="preface" value="https://rust-basel.ch" {}
+                input type="hidden" id="description" name="description" value="https://rust-basel.ch" {}
             }
         }
     }

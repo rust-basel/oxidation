@@ -4,6 +4,7 @@ use crate::http_types::{ox_css, ox_js};
 
 pub mod basel;
 pub mod daisy;
+pub mod htmx;
 pub mod tailwind;
 pub mod themes;
 
@@ -22,6 +23,7 @@ async fn assets(Path(file): Path<String>) -> impl IntoResponse {
         "daisy.css" => daisy::CSS,
         "tw.js" => tailwind::JS,
         "themes.css" => basel::CSS,
+        "htmx.js" => htmx::JS,
         _ => "",
     };
 

@@ -6,9 +6,11 @@ use axum::{
     routing::get,
 };
 use log::{error, info};
+use maud::{Markup, html};
 
 use crate::{
-    model::{JobId, Limit},
+    jobs::job_card,
+    model::{Job, JobId, Limit},
     repository::JobRepo,
 };
 pub fn router() -> Router {
@@ -21,14 +23,29 @@ pub fn router() -> Router {
 pub async fn get_jobs(repo: Extension<JobRepo>, limit: Query<Limit>) -> impl IntoResponse {
     let limit: Limit = *limit;
     match repo.get_page(limit).await {
-        Ok(_jobs) => (
+        Ok(jobs) => (
             StatusCode::OK,
             // todo return new view
-            Ok(""),
+            Ok(html!((jobs_view(jobs)))),
         ),
         Err(err) => {
             error!("Failed to get a page of jobs: {err}\n{:?}", err.source());
             (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}")))
+        }
+    }
+}
+
+pub fn jobs_view(jobs: Vec<Job>) -> Markup {
+    html! {
+        @for job in jobs{
+            (job_card(job.title(), job.preface(), vec![html!{
+                div class="badge badge-accent" {
+                    "On-site"
+                }
+            }], job.description(), html!{
+                a class="btn btn-secondary btn-sm bg-base" href=(job.uri()) {
+                "Apply"
+            }}))
         }
     }
 }

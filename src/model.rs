@@ -57,6 +57,24 @@ pub struct Job {
     pub description: Option<String>,
 }
 
+impl Job {
+    pub fn title(&self) -> String {
+        self.title.clone().unwrap_or(String::new())
+    }
+
+    pub fn preface(&self) -> String {
+        self.preface.clone().unwrap_or(String::new())
+    }
+
+    pub fn description(&self) -> String {
+        self.description.clone().unwrap_or(String::new())
+    }
+
+    pub fn uri(&self) -> String {
+        self.uri.to_string()
+    }
+}
+
 #[derive(Debug, Copy, Clone, Deserialize)]
 pub struct Limit {
     pub page_size: Option<u8>,
