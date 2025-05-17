@@ -52,6 +52,9 @@ impl From<Uri> for JobUri {
 pub struct Job {
     pub id: JobId,
     pub uri: JobUri,
+    pub title: Option<String>,
+    pub preface: Option<String>,
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Copy, Clone, Deserialize)]

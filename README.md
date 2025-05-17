@@ -13,7 +13,7 @@ GET  jobs/{job_id}
 ```
 
 #### Create a new post
-Create a new job with a json string of for the URI
+Create a new job with a form string of for the URI
 ```
 PUT api/jobs 
   -H 'Content-Type: application/json'  

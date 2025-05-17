@@ -42,17 +42,31 @@ impl JobRepo {
         Ok(Self { pool })
     }
 
-    pub async fn create(&self, uri: &Uri) -> Result<Job> {
+    pub async fn create(
+        &self,
+        uri: &Uri,
+        title: Option<String>,
+        preface: Option<String>,
+        description: Option<String>,
+    ) -> Result<Job> {
         let uri_str = uri.to_string();
         sqlx::query_as!(
             Job,
             r#"
                 INSERT INTO 
-                    job (uri) VALUES (?1)
+                    job (uri, title, preface, description) VALUES (?1, ?2, ?3, ?4)
                 ON CONFLICT (uri) DO UPDATE SET uri = (?1)
-                RETURNING id as "id: JobId", uri as "uri: JobUri";
+                RETURNING 
+                    id as "id: JobId",
+                    uri as "uri: JobUri", 
+                    title as "title: String", 
+                    preface as "preface: String", 
+                    description as "description: String";
             "#,
-            uri_str
+            uri_str,
+            title,
+            preface,
+            description
         )
         .fetch_one(&self.pool)
         .await
@@ -67,7 +81,10 @@ impl JobRepo {
             r#"
                 SELECT 
                     id as "id: JobId",
-                    uri as "uri: JobUri" 
+                    uri as "uri: JobUri",
+                    title as "title: String",
+                    preface as "preface: String",
+                    description as "description: String"
                 FROM job LIMIT ?1 OFFSET ?2;
             "#,
             page_size,
@@ -86,7 +103,10 @@ impl JobRepo {
                 WHERE id = ?1
                 RETURNING
                     id as "id: JobId",
-                    uri as "uri: JobUri";
+                    uri as "uri: JobUri",
+                    title as "title: String",
+                    preface as "preface: String",
+                    description as "description: String";
             "#,
             id
         )
@@ -103,7 +123,10 @@ impl JobRepo {
                 WHERE id = ?2
                 RETURNING
                     id as "id: JobId",
-                    uri as "uri: JobUri";
+                    uri as "uri: JobUri",
+                    title as "title: String",
+                    preface as "preface: String",
+                    description as "description: String";
             "#,
             uri,
             id
@@ -120,7 +143,10 @@ impl JobRepo {
             r#"
                 SELECT 
                     id as "id: JobId",
-                    uri as "uri: JobUri" 
+                    uri as "uri: JobUri",
+                    title as "title: String",
+                    preface as "preface: String",
+                    description as "description: String"
                 FROM job WHERE id = ?1;
             "#,
             id
@@ -156,8 +182,13 @@ mod test {
             .parse::<Uri>()
             .expect("failed to parse Uri from test string");
         let job_uri: JobUri = uri.clone().into();
+
+        let title = "test title".to_string();
+        let preface = "test preface".to_string();
+        let description = "test description".to_string();
+
         let job = repo
-            .create(&uri)
+            .create(&uri, Some(title), Some(preface), Some(description))
             .await
             .expect("failed to insert job in test");
 

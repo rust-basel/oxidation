@@ -1,23 +1,40 @@
 use axum::{
-    Extension, Json,
+    Extension, Form,
     extract::Path,
     http::{StatusCode, Uri},
     response::IntoResponse,
 };
 use log::{error, warn};
+use serde::{Deserialize, Serialize};
 
 use crate::{model::JobId, repository::JobRepo};
 
-pub async fn create_job(repo: Extension<JobRepo>, uri: Json<String>) -> impl IntoResponse {
-    let Ok(uri) = uri.parse::<Uri>() else {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct JobRequest {
+    uri: String,
+    title: String,
+    preface: String,
+    description: String,
+}
+
+pub async fn create_job(repo: Extension<JobRepo>, payload: Form<JobRequest>) -> impl IntoResponse {
+    let Ok(uri) = payload.0.uri.parse::<Uri>() else {
         return (
             StatusCode::BAD_REQUEST,
-            Err(format!("{} is not a valid URI", *uri)),
+            Err(format!("{:?} is not a valid URI", payload)),
         );
     };
 
-    match repo.create(&uri).await {
-        Ok(resp) => (StatusCode::OK, Ok(Json(resp))),
+    let title = payload.title.clone();
+    let preface = payload.preface.clone();
+    let description = payload.description.clone();
+
+    match repo
+        .create(&uri, Some(title), Some(preface), Some(description))
+        .await
+    {
+        // todo return json
+        Ok(resp) => (StatusCode::OK, Ok(resp.id.to_string())),
         Err(err) => {
             error!(
                 "Failed to create job from request: {err}\n{:?}",
@@ -54,12 +71,12 @@ pub async fn delete_job(repo: Extension<JobRepo>, job_id: Path<JobId>) -> impl I
 pub async fn update_job(
     repo: Extension<JobRepo>,
     job_id: Path<JobId>,
-    uri: Json<String>,
+    payload: Form<JobRequest>,
 ) -> impl IntoResponse {
-    let Ok(uri) = uri.parse::<Uri>() else {
+    let Ok(uri) = payload.uri.parse::<Uri>() else {
         return (
             StatusCode::BAD_REQUEST,
-            Err(format!("{} is not a valid URI", *uri)),
+            Err(format!("{:?} is not a valid URI", *payload)),
         );
     };
     let uri = uri.into();
