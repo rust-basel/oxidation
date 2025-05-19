@@ -35,8 +35,9 @@ DELETE api/jobs/{job_id}
 
 ## Development
 A simple development database is used for testing migrations and using sqlxs compile time query 
-verification in `data/dev.db`. This is configured in the committed `.env` file. It's schema 
-should always be up-to-date.
+verification in `data/dev.db`. This is configured in the committed `.env` file. If you do not have an `.env` yet, you can
+copy the `.env.example` as starter.
+It's schema should always be up-to-date.
 
 To add a migration run (making sure you have the [sqlx-cli](https://lib.rs/crates/sqlx-cli))
 ```sh
