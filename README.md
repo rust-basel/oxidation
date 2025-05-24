@@ -4,7 +4,7 @@ This project is an job posting application for Jobs with Rust.
 
 ## API
 
-Go the folder api_tests and jump into any hurl file or click here [here](https://github.com/rust-basel/oxidation/tree/main/api_tests)
+Go the folder api_tests and jump into any hurl file or click [here](https://github.com/rust-basel/oxidation/tree/main/api_tests)
 
 ## Development
 A simple development database is used for testing migrations and using sqlxs compile time query 
