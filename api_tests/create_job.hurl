@@ -1,5 +1,5 @@
 # wait for root
-PUT {{target}}/api/jobs
+PUT {{target}}/jobs
 [FormParams]
 uri: http://rust-basel.ch/some-job-3.html&query_param=value&whats_this
 title: Cool Job
@@ -12,7 +12,7 @@ job_id: body
 
 
 
-# wait for root
+# update a job
 POST {{target}}/api/jobs/{{job_id}}
 [FormParams]
 uri: http://rust-basel.ch/some-job-3.html&query_param=value&whats_this

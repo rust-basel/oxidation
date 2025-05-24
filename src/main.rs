@@ -1,40 +1,29 @@
 use anyhow::Context;
 use anyhow::{Result, bail};
-use config::Config;
 use log::info;
-use ox_env::{OxApp, OxConfig};
 use tokio::{signal, sync::oneshot};
 
 use log::warn;
 
-use axum::{
-    Extension, Router,
-    routing::{delete, post, put},
-};
+use axum::{Extension, Router};
 use tokio::net::TcpListener;
 
+mod app;
 mod assets;
-mod handlers;
 mod health;
 mod http_types;
 mod jobs;
 mod model;
-mod ox_env;
 mod repository;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     env_logger::init();
-    let config: OxConfig = Config::builder()
-        .add_source(config::File::with_name("config/default.toml").required(false))
-        .add_source(config::File::with_name("config/config.toml").required(false))
-        .add_source(config::Environment::with_prefix("OX"))
-        .build()
-        .context("failed to build config")?
-        .try_deserialize()
-        .context("failed to parse config")?;
+    let config: app::OxConfig = app::OxConfig::init()?;
 
-    let (app, shutdown) = OxApp::new(config).await.context("failed to create app")?;
+    let (app, shutdown) = app::Oxidation::new(config)
+        .await
+        .context("failed to create app")?;
 
     let shutdown = tokio::spawn(handle_shutdown(shutdown));
     let serve = Box::pin(serve(app));
@@ -65,8 +54,8 @@ async fn handle_shutdown(shutdown: oneshot::Sender<()>) -> Result<()> {
     Ok(())
 }
 
-pub async fn serve(app: OxApp) -> anyhow::Result<()> {
-    let OxApp {
+pub async fn serve(app: app::Oxidation) -> anyhow::Result<()> {
+    let app::Oxidation {
         socket_addr,
         repo,
         shutdown,
@@ -75,9 +64,6 @@ pub async fn serve(app: OxApp) -> anyhow::Result<()> {
         .merge(health::router())
         .merge(jobs::router())
         .merge(assets::router())
-        .route("/api/jobs", put(crate::handlers::create_job))
-        .route("/api/jobs/{job_id}", post(crate::handlers::update_job))
-        .route("/api/jobs/{job_id}", delete(crate::handlers::delete_job))
         .layer(Extension(repo));
 
     let listener = TcpListener::bind(socket_addr)

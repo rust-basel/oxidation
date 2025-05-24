@@ -9,12 +9,36 @@ use sqlx::{
 };
 
 use crate::model::Job;
-use crate::model::Limit;
 use crate::model::{JobId, JobUri};
+
+#[derive(Debug, Copy, Clone, Deserialize)]
+pub struct Limit {
+    pub page_size: Option<u8>,
+    pub page: Option<u32>,
+}
+
+impl Limit {
+    pub fn page_size_default(&self) -> u32 {
+        self.page_size.unwrap_or(10) as u32
+    }
+
+    pub fn page_default(&self) -> u32 {
+        self.page.unwrap_or(0)
+    }
+    pub fn offset(&self) -> u32 {
+        self.page_default() * self.page_size_default()
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct JobRepoConfig {
     db_path: String,
+}
+
+impl JobRepoConfig {
+    pub fn new(db_path: String) -> Self {
+        Self { db_path }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -163,8 +187,8 @@ mod test {
     use sqlx::{Connection, SqliteConnection, SqlitePool};
 
     use crate::{
-        model::{JobUri, Limit},
-        repository::JobRepo,
+        model::JobUri,
+        repository::{JobRepo, Limit},
     };
 
     #[tokio::test]

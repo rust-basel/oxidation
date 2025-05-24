@@ -12,6 +12,14 @@ verification in `data/dev.db`. This is configured in the committed `.env` file. 
 copy the `.env.example` as starter.
 It's schema should always be up-to-date.
 
+### Debug
+
+Log debug info about the application
+
+```sh
+RUST_LOG=debug cargo run
+```
+
 ### SQLX
 
 To add a migration run (making sure you have the [sqlx-cli](https://lib.rs/crates/sqlx-cli))

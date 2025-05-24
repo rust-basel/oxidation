@@ -74,24 +74,3 @@ impl Job {
         self.uri.to_string()
     }
 }
-
-// move to repository
-
-#[derive(Debug, Copy, Clone, Deserialize)]
-pub struct Limit {
-    pub page_size: Option<u8>,
-    pub page: Option<u32>,
-}
-
-impl Limit {
-    pub fn page_size_default(&self) -> u32 {
-        self.page_size.unwrap_or(10) as u32
-    }
-
-    pub fn page_default(&self) -> u32 {
-        self.page.unwrap_or(0)
-    }
-    pub fn offset(&self) -> u32 {
-        self.page_default() * self.page_size_default()
-    }
-}

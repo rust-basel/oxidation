@@ -3,7 +3,7 @@ set dotenv-load
 
 image_name := "ghcr.io/rust-basel/oxidation"
 
-export RUST_LOG := "info"
+export RUST_LOG := "debug"
 
 run *args:
     cargo run {{args}}

@@ -1,24 +1,46 @@
+use axum::routing::{delete, post, put};
 use axum::{
     Extension, Form,
     extract::Path,
     http::{StatusCode, Uri},
     response::IntoResponse,
 };
-use log::{error, warn};
-use serde::{Deserialize, Serialize};
+use axum::{Router, extract::Query, routing::get};
 
-use crate::{model::JobId, repository::JobRepo};
+use log::error;
+use log::warn;
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct JobRequest {
-    uri: String,
-    title: String,
-    preface: String,
-    description: String,
+use maud::html;
+
+use super::api;
+use crate::model::JobId;
+use crate::repository::Limit;
+use crate::{jobs::view::card::all, repository::JobRepo};
+
+pub fn router() -> Router {
+    Router::new()
+        .route("/jobs", get(get_jobs))
+        .route("/jobs", put(create))
+        .route("/api/jobs/{job_id}", post(api::update_job))
+        .route("/api/jobs/{job_id}", delete(api::delete_job))
 }
 
-// todo move to jobs module
-pub async fn create_job(repo: Extension<JobRepo>, payload: Form<JobRequest>) -> impl IntoResponse {
+#[axum::debug_handler]
+pub async fn get_jobs(repo: Extension<JobRepo>, limit: Query<Limit>) -> impl IntoResponse {
+    let limit: Limit = *limit;
+    match repo.get_page(limit).await {
+        Ok(jobs) => (StatusCode::OK, Ok(html!((all(jobs))))),
+        Err(err) => {
+            error!("Failed to get a page of jobs: {err}\n{:?}", err.source());
+            (StatusCode::INTERNAL_SERVER_ERROR, Err(format!("{err}")))
+        }
+    }
+}
+
+pub async fn create(
+    repo: Extension<JobRepo>,
+    payload: Form<super::JobRequest>,
+) -> impl IntoResponse {
     let Ok(uri) = payload.0.uri.parse::<Uri>() else {
         return (
             StatusCode::BAD_REQUEST,
@@ -34,7 +56,7 @@ pub async fn create_job(repo: Extension<JobRepo>, payload: Form<JobRequest>) -> 
         .create(&uri, Some(title), Some(preface), Some(description))
         .await
     {
-        // todo return json
+        // when having admin board, return the created job reference link as html
         Ok(resp) => (StatusCode::OK, Ok(resp.id.to_string())),
         Err(err) => {
             error!(
@@ -69,10 +91,11 @@ pub async fn delete_job(repo: Extension<JobRepo>, job_id: Path<JobId>) -> impl I
         }
     }
 }
+
 pub async fn update_job(
     repo: Extension<JobRepo>,
     job_id: Path<JobId>,
-    payload: Form<JobRequest>,
+    payload: Form<super::JobRequest>,
 ) -> impl IntoResponse {
     let Ok(uri) = payload.uri.parse::<Uri>() else {
         return (

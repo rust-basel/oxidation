@@ -1,17 +1,8 @@
-// todo remove
-
 use axum::{
     http::{HeaderValue, header},
     response::IntoResponse,
     response::Response,
 };
-
-#[allow(unused)]
-pub type OxHtml = axum::response::Html<String>;
-
-pub fn ox_html(content: String) -> OxHtml {
-    axum::response::Html(content)
-}
 
 /// An CSS response.
 ///
