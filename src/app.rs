@@ -109,9 +109,10 @@ mod ox_environment {
         let sqlx_setup_missing = env::var(SQLX_URL_KEY).is_err();
 
         if sqlx_setup_missing && is_default_host {
-            warn!("setting sqlx {} to {}", SQLX_URL_KEY, db_url);
+            let sqlx_url = format!("sqlite:{}", db_url);
+            warn!("setting sqlx {} to {}", SQLX_URL_KEY, sqlx_url);
             unsafe {
-                env::set_var(SQLX_URL_KEY, db_url.clone());
+                env::set_var(SQLX_URL_KEY, sqlx_url);
             }
         }
 
