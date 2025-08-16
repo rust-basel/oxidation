@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0](https://github.com/rust-basel/oxidation/compare/v0.1.0...v0.2.0) (2025-08-16)
+
+
+### Features
+
+* add jobs ([ef19aca](https://github.com/rust-basel/oxidation/commit/ef19aca53d820ed6d07e3564dca5f15ce51b1080))
+* shallow setup ([44d51f0](https://github.com/rust-basel/oxidation/commit/44d51f0ffad3a50fb5959c340299670830bfff12))
+
+
+### Bug Fixes
+
+* fmt command ([d5a8f14](https://github.com/rust-basel/oxidation/commit/d5a8f14a8737bc4e073c2bfc78b6c4a353ee4b1f))
+* job test ([77b1d40](https://github.com/rust-basel/oxidation/commit/77b1d40796b46617395e15f7017852471d9e3254))
+
 ## 0.1.0 (2025-05-24)
 
 
