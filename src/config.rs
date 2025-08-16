@@ -1,15 +1,55 @@
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::{env, path::PathBuf};
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct JobSource {
+    pub url: Option<String>,
+    pub headers: Option<Vec<Header>>,
+    pub wait: Option<u64>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Header {
+    pub header_name: String,
+    pub header_value: String,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub programming_languages: Vec<String>,
+    pub job_sources: Vec<JobSource>,
 }
 
 impl Default for Config {
     fn default() -> Self {
         Self {
             programming_languages: vec!["rust".to_string()],
+            job_sources: vec![JobSource {
+                url: Some("https://jobicy.com/api/v2/remote-jobs".to_string()),
+                headers: None,
+                wait: None,
+            }],
+        }
+    }
+}
+
+pub trait Testing {
+    fn test_instance() -> Self;
+}
+
+impl Testing for Config {
+    fn test_instance() -> Self {
+        let test_work_time: u64 = env::var("OX_TEST_WORK")
+            .unwrap_or_else(|_| "2000".to_string())
+            .parse()
+            .unwrap_or(2000);
+        Self {
+            programming_languages: vec!["rust".to_string()],
+            job_sources: vec![JobSource {
+                url: None,
+                headers: None,
+                wait: Some(test_work_time),
+            }],
         }
     }
 }

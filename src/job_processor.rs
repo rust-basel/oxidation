@@ -18,9 +18,10 @@ pub async fn process_jobs_concurrent<F>(
     jobs: Vec<F>,
 ) -> Vec<JobPosting>
 where
-    F: Future<Output = JobPosting>,
+    F: Future<Output = Vec<JobPosting>>,
 {
     let results = futures::future::join_all(jobs).await;
+    let results = results.into_iter().flatten().collect::<Vec<_>>();
     job_postings.extend(results);
     job_postings
 }
