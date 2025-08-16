@@ -1,9 +1,0 @@
-services:
-  oxidation:
-    image: ghcr.io/rust-basel/oxidation
-    ports:
-      - "8000:8000"
-    environment:
-      OX_HOST: 0.0.0.0
-      OX_PORT: 8000
-      OX_DB_URL: "data/dev.db"
