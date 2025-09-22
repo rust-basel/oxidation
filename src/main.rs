@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 mod config;
+mod http_client;
 mod job_processor;
 mod scraper;
 mod show_jobs;

@@ -4,6 +4,7 @@ use tokio::time::sleep;
 
 use crate::{
     config::{Config, JobSource},
+    http_client::HttpClient,
     job_processor, scraper,
 };
 
@@ -55,7 +56,13 @@ async fn create_simple_job(source: &JobSource) -> Vec<scraper::JobPosting> {
         simulate_random_work(work).await;
     }
 
-    //todo implement the actual scraping from the url
+    if let Some(url) = source.url.clone() {
+        let res = HttpClient::new().get(url.as_str());
+
+        if let Ok(first_content) = res {
+            println!("{}", first_content.body)
+        }
+    }
 
     vec![]
 }
